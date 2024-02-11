@@ -4,6 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+	scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+	display: none;
+}
+
 .font-sans {
 	font-family: 'Source Sans 3', sans-serif;
 }

@@ -17,6 +17,6 @@ export default async function Page() {
   })
 
   return (
-    <Sidebar folders={folders} />
+    <Sidebar folders={folders} userId={session.user.userId} />
   );
 }

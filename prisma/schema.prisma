@@ -20,7 +20,7 @@ model User {
 
 model Folder {
   id String @id @default(uuid())
-  name String @unique
+  name String
   userId String
   posts Post[]
 
