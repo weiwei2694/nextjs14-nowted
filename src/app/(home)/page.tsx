@@ -1,3 +1,4 @@
+import ListPosts from "@/components/list-posts/list-posts";
 import Sidebar from "@/components/sidebar/sidebar";
 import prismadb from "@/lib/prismaDb";
 import { authOptions } from "@/lib/utils/auth-options";
@@ -27,6 +28,9 @@ export default async function Page() {
   })
 
   return (
-    <Sidebar recents={recents} folders={folders} userId={session.user.userId} />
+    <main className="flex">
+      <Sidebar recents={recents} folders={folders} userId={session.user.userId} />
+      <ListPosts />
+    </main>
   );
 }
