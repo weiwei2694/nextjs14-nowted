@@ -8,7 +8,12 @@ import SessionType from "@/types/session.type";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-export default async function Page() {
+type SearchParams = {
+  folderId?: string;
+  postId?: string;
+}
+
+export default async function Page({ searchParams }: { searchParams: SearchParams }) {
   const session: SessionType = await getServerSession(authOptions);
   if (!session) redirect('/auth/login');
 
@@ -27,10 +32,22 @@ export default async function Page() {
     }
   })
 
+  const { folderId, postId } = searchParams;
+  const folder = await prismadb.folder.findFirst({
+    where: {
+      id: folderId
+    },
+    include: {
+      posts: true
+    }
+  });
+  if (!folder)
+    redirect('/');
+
   return (
     <main className="flex">
       <Sidebar recents={recents} folders={folders} userId={session.user.userId} />
-      <ListPosts />
+      <ListPosts posts={folder.posts} postId={postId} folderName={folder.name} />
     </main>
   );
 }
