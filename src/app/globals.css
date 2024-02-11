@@ -7,3 +7,15 @@
 .font-sans {
 	font-family: 'Source Sans 3', sans-serif;
 }
+
+.label {
+	@apply font-sans font-semibold text-16;
+}
+
+.input {
+	@apply w-full border border-gray-300 py-6 px-6 rounded outline-none focus:ring-indigo-600 font-sans font-medium;
+}
+
+.input-error {
+	@apply !border-red-500 !border-2;
+}
