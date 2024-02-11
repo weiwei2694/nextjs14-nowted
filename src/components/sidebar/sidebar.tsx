@@ -14,13 +14,15 @@ import List from './list';
 import { signOut } from 'next-auth/react';
 import FolderType from '@/types/folder.type';
 import Folders from './folders';
+import PostType from '@/types/post.type';
 
 type Props = {
   userId: string;
   folders: FolderType[];
+  recents: PostType[];
 }
 
-const Sidebar = ({ folders, userId }: Props) => {
+const Sidebar = ({ folders, recents, userId }: Props) => {
   const logoutHandler = () => {
     signOut();
   }
@@ -51,22 +53,14 @@ const Sidebar = ({ folders, userId }: Props) => {
           <Subtitle title="Recents" />
         </div>
         <div className="flex flex-col gap-y-5">
-          <List
-            title="Reflection on the Month of June"
-            icon={<FaRegFileAlt className="w-20 h-20 text-white" />}
-            active={true}
-            activeColor="bg-[#312EB5]"
-          />
-          <List
-            title="Project proposal"
-            icon={<FaRegFileAlt className="w-20 h-20 text-white" />}
-            active={false}
-          />
-          <List
-            title="Travel itinerary"
-            icon={<FaRegFileAlt className="w-20 h-20 text-white" />}
-            active={false}
-          />
+          {recents.map(recent => (
+            <List
+              key={recent.id}
+              title={recent.title}
+              icon={<FaRegFileAlt className="w-20 h-20 text-white" />}
+              active={false}
+            />
+          ))}
         </div>
       </div>
       {/* Folders */}

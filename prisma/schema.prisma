@@ -8,38 +8,43 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
-  name String
-  email String @unique
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
   password String
-  folders Folder[]
+  folders  Folder[]
+  posts    Post[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Folder {
-  id String @id @default(uuid())
-  name String
+  id     String @id @default(uuid())
+  name   String
   userId String
-  posts Post[]
+  posts  Post[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([name])
 }
 
 model Post {
-  id String @id @default(uuid())
-  title String
-  body String @db.LongText
+  id       String @id @default(uuid())
+  title    String
+  body     String @db.LongText
   folderId String
+  userId   String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   folder Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([title])
 }
