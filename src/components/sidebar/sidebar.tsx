@@ -1,5 +1,7 @@
+"use client"
+
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import { FiSearch } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa6";
 import { FaRegFileAlt, FaRegStar } from "react-icons/fa";
@@ -9,6 +11,12 @@ import { LuFolderOpen } from "react-icons/lu";
 import List from './list';
 
 const Sidebar = () => {
+  const [openNewFolder, setOpenNewFolder] = useState(false);
+
+  const toggleCreateNewFolder = () => {
+    setOpenNewFolder(prev => !prev);
+  }
+
   return (
     <nav className="w-300 bg-[#1b1b1b] h-screen py-30 flex flex-col gap-y-30">
       {/* Logo & Search Buttonn */}
@@ -57,9 +65,17 @@ const Sidebar = () => {
       <div>
         <div className="flex items-center justify-between px-20 mb-10">
           <Subtitle title="Folders" />
-          <FiFolderPlus className="text-white/60 w-20 h-20 cursor-pointer" />
+          <FiFolderPlus className="text-white/60 w-20 h-20 cursor-pointer" onClick={toggleCreateNewFolder} />
         </div>
         <div className="flex flex-col gap-y-5">
+          {openNewFolder ? (
+            <div className="py-10 px-20 h-40 w-full flex items-center gap-x-15 cursor-pointer">
+              <LuFolderOpen className="w-20 h-20 text-white" />
+              <div>
+                <input type="text" name="folder" placeholder="New Folder" className="w-full bg-transparent text-white outline-none border-none font-sans font-semibold placeholder:text-white/60" autoFocus />
+              </div>
+            </div>
+          ) : null}
           <List
             title="Personal"
             icon={<LuFolderOpen className="w-20 h-20 text-white" />}
