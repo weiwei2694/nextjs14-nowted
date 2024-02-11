@@ -15,6 +15,7 @@ import { signOut } from 'next-auth/react';
 import FolderType from '@/types/folder.type';
 import Folders from './folders';
 import PostType from '@/types/post.type';
+import { useSearchParams } from 'next/navigation';
 
 type Props = {
   userId: string;
@@ -23,6 +24,10 @@ type Props = {
 }
 
 const Sidebar = ({ folders, recents, userId }: Props) => {
+  const searchParams = useSearchParams();
+  const folderId = searchParams.get('folderId');
+  const postId = searchParams.get('postId');
+
   const logoutHandler = () => {
     signOut();
   }
@@ -60,7 +65,8 @@ const Sidebar = ({ folders, recents, userId }: Props) => {
               postId={recent.id}
               title={recent.title}
               icon={<FaRegFileAlt className="w-20 h-20 text-white" />}
-              active={false}
+              active={folderId === recent.folderId && postId === recent.id}
+              activeColor={folderId === recent.folderId && postId === recent.id ? "bg-[#312EB5]" : ""}
             />
           ))}
         </div>

@@ -10,6 +10,7 @@ import { useFormStatus } from 'react-dom'
 import FolderType from "@/types/folder.type";
 import Subtitle from "./subtitle";
 import List from "./list";
+import { useSearchParams } from 'next/navigation';
 
 type Errors = {
   name: string;
@@ -21,6 +22,9 @@ type Props = {
 }
 
 const Folders = ({ folders, userId }: Props) => {
+  const searchParams = useSearchParams();
+  const folderId = searchParams.get('folderId');
+
   const [errors, setErrors] = useState<Errors>(null);
   const [openNewFolder, setOpenNewFolder] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -86,7 +90,8 @@ const Folders = ({ folders, userId }: Props) => {
             title={folder.name}
             folderId={folder.id}
             icon={<LuFolderOpen className="w-20 h-20 text-white" />}
-            active={false}
+            active={folderId === folder.id}
+            activeColor={folderId === folder.id ? "bg-white/5" : ""}
           />
         )) : <h3 className="font-sans text-16 font-semibold text-white/60 px-20">There Are No Folders</h3>}
       </div>
