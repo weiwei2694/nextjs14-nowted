@@ -84,6 +84,7 @@ const Folders = ({ folders, userId }: Props) => {
           <List
             key={folder.id}
             title={folder.name}
+            folderId={folder.id}
             icon={<LuFolderOpen className="w-20 h-20 text-white" />}
             active={false}
           />

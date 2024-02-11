@@ -56,6 +56,8 @@ const Sidebar = ({ folders, recents, userId }: Props) => {
           {recents.map(recent => (
             <List
               key={recent.id}
+              folderId={recent.folderId}
+              postId={recent.id}
               title={recent.title}
               icon={<FaRegFileAlt className="w-20 h-20 text-white" />}
               active={false}
