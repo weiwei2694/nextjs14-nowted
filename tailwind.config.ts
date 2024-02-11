@@ -1,20 +1,32 @@
-import type { Config } from "tailwindcss";
+import sizeConst from './sizeConst';
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
-    },
-  },
-  plugins: [],
+	content: [
+		'./src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+		'./src/components/**/*.{js,ts,jsx,tsx,mdx}',
+		'./src/app/**/*.{js,ts,jsx,tsx,mdx}',
+	],
+	theme: {
+		extend: {
+			padding: sizeConst(),
+			margin: sizeConst(),
+			height: sizeConst(),
+			width: sizeConst(),
+			gap: sizeConst(),
+			fontSize: sizeConst(),
+			lineHeight: sizeConst(),
+			borderRadius: sizeConst(),
+			borderWidth: sizeConst(),
+			spacing: sizeConst(),
+			inset: sizeConst(),
+			letterSpacing: sizeConst(),
+			minHeight: sizeConst(),
+			minWidth: sizeConst(),
+			maxWidth: sizeConst(),
+			maxHeight: sizeConst(),
+		},
+	},
+	plugins: [],
 };
 export default config;
