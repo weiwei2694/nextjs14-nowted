@@ -93,7 +93,7 @@ const Folders = ({ folders, userId }: Props) => {
             active={folderId === folder.id}
             activeColor={folderId === folder.id ? "bg-white/5" : ""}
           />
-        )) : <h3 className="font-sans text-16 font-semibold text-white/60 px-20">There Are No Folders</h3>}
+        )) : <h3 className="subheading px-20">There Are No Folders</h3>}
       </div>
     </div>
   )

@@ -16,6 +16,10 @@
 	font-family: 'Source Sans 3', sans-serif;
 }
 
+.subheading {
+	@apply font-sans text-16 font-semibold text-white/60;
+}
+
 .label {
 	@apply font-sans font-semibold text-16;
 }

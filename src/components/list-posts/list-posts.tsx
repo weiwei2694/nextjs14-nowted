@@ -21,14 +21,18 @@ const ListPosts = ({ folder, postId }: Props) => {
                     <h2 className="px-20 font-sans font-semibold text-22 text-white">{folder.name}</h2>
 
                     <div className="flex flex-col gap-y-20 px-20">
-                        {folder.posts.map(post => (
-                            <List
-                                title={post.title}
-                                createdAt={post.createdAt.toLocaleDateString()}
-                                body={post.body}
-                                active={postId === post.id}
-                            />
-                        ))}
+                        {folder.posts.length ? (
+                            folder.posts.map(post => (
+                                <List
+                                    title={post.title}
+                                    createdAt={post.createdAt.toLocaleDateString()}
+                                    body={post.body}
+                                    active={postId === post.id}
+                                />
+                            ))
+                        ) : (
+                            <h3 className="subheading">This folder doesn't have any posts yet</h3>
+                        )}
                     </div>
                 </>
             ) : (

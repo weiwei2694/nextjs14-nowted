@@ -69,7 +69,7 @@ const Sidebar = ({ folders, recents, userId }: Props) => {
           <Subtitle title="Recents" />
         </div>
         <div className="flex flex-col gap-y-5">
-          {recents.map(recent => (
+          {recents.length ? recents.map(recent => (
             <List
               key={recent.id}
               folderId={recent.folderId}
@@ -79,7 +79,9 @@ const Sidebar = ({ folders, recents, userId }: Props) => {
               active={folderId === recent.folderId && postId === recent.id}
               activeColor={folderId === recent.folderId && postId === recent.id ? "bg-[#312EB5]" : ""}
             />
-          ))}
+          )) : (
+            <h3 className="subheading px-20">There are no recent posts</h3>
+          )}
         </div>
       </div>
       {/* Folders */}
