@@ -10,7 +10,7 @@ const config: Config = {
 	theme: {
 		extend: {
 			colors: {
-				primary: '#1b1b1b',
+				primary: '#181818',
 			},
 			padding: sizeConst(),
 			margin: sizeConst(),

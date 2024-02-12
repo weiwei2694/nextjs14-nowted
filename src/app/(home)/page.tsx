@@ -1,4 +1,5 @@
 import ListPosts from "@/components/list-posts/list-posts";
+import Main from "@/components/main/main";
 import Sidebar from "@/components/sidebar/sidebar";
 import prismadb from "@/lib/prismaDb";
 import { authOptions } from "@/lib/utils/auth-options";
@@ -48,6 +49,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
     <main className="flex">
       <Sidebar recents={recents} folders={folders} userId={session.user.userId} />
       <ListPosts posts={folder.posts} postId={postId} folderName={folder.name} />
+      <Main />
     </main>
   );
 }

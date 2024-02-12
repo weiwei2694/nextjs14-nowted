@@ -12,7 +12,7 @@ type Props = {
 
 const ListPosts = ({ posts, postId, folderName }: Props) => {
     return (
-        <section className="w-350 h-screen overflow-y-auto py-30 bg-[#1C1C1C] flex flex-col gap-y-30">
+        <section className="min-w-350 max-w-350 h-screen overflow-y-auto py-30 bg-[#1C1C1C] flex flex-col gap-y-30">
             <h2 className="px-20 font-sans font-semibold text-22 text-white">{folderName}</h2>
 
             <div className="flex flex-col gap-y-20 px-20">

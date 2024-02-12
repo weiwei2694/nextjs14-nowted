@@ -33,7 +33,7 @@ const Sidebar = ({ folders, recents, userId }: Props) => {
   }
 
   return (
-    <nav className="w-300 bg-[#1b1b1b] h-screen py-30 flex flex-col gap-y-30 overflow-y-auto">
+    <nav className="min-w-300 max-w-300 bg-[#1b1b1b] h-screen py-30 flex flex-col gap-y-30 overflow-y-auto">
       {/* Logo & Search Buttonn */}
       <div className="px-20 flex items-center justify-between">
         <Image
