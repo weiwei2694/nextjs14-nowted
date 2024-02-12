@@ -33,8 +33,8 @@ const CreateNewNoteModal = ({ folders, userId }: Props) => {
         try {
             const data = {
                 userId,
-                folderId: formData.get('folderId') as string,
-                title: formData.get('title') as string,
+                folderId: formData.get('folderId') as string || "",
+                title: formData.get('title') as string || "",
                 path: window.location.pathname
             };
 
@@ -68,6 +68,8 @@ const CreateNewNoteModal = ({ folders, userId }: Props) => {
             router.push(`/?folderId=${folderId}&postId=${postId}`);
         } else if (folderId) {
             router.push(`/?folderId=${folderId}`);
+        } else {
+            router.push('/');
         }
     }
 

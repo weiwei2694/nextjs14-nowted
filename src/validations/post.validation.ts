@@ -5,6 +5,6 @@ export const createPostSchema = z.object({
 		.string()
 		.min(1, { message: 'Title is required' })
 		.max(225, { message: 'Title must be less than 100 characters' }),
-	folderId: z.string({ required_error: 'Folder is required' }).min(1),
-	userId: z.string({ required_error: 'Folder is required' }).min(1),
+	folderId: z.string().min(1, { message: 'Folder is required' }),
+	userId: z.string().min(1),
 });

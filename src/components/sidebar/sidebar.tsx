@@ -15,7 +15,7 @@ import { signOut } from 'next-auth/react';
 import FolderType from '@/types/folder.type';
 import Folders from './folders';
 import PostType from '@/types/post.type';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 type Props = {
   userId: string;
@@ -24,6 +24,7 @@ type Props = {
 }
 
 const Sidebar = ({ folders, recents, userId }: Props) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const folderId = searchParams.get('folderId');
   const postId = searchParams.get('postId');
@@ -34,9 +35,11 @@ const Sidebar = ({ folders, recents, userId }: Props) => {
 
   const createNewNote = () => {
     if (folderId && postId) {
-      window.location.href = `/?folderId=${folderId}&postId=${postId}&modal=open`;
+      router.push(`/?folderId=${folderId}&postId=${postId}&modal=open`);
+    } else if (folderId) {
+      router.push(`/?folderId=${folderId}&modal=open`);
     } else {
-      window.location.href = `/?folderId=${folderId}&modal=open`;
+      router.push(`/?modal=open`);
     }
   }
 
