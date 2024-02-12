@@ -53,7 +53,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
       <Main />
 
       {/* components/sidebar/create-new-note-modal.tsx */}
-      <CreateNewNoteModal folders={folders} />
+      <CreateNewNoteModal folders={folders} userId={session.user.userId} />
     </main>
   );
 }

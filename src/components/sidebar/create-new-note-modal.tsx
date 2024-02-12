@@ -1,6 +1,8 @@
 "use client"
 
+import { createPostAction } from "@/actions/post.action";
 import FolderType from "@/types/folder.type";
+import { createPostSchema } from "@/validations/post.validation";
 import { useSearchParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -10,10 +12,11 @@ type Errors = {
 } | null
 
 type Props = {
-    folders: FolderType[]
+    folders: FolderType[];
+    userId: string;
 }
 
-const CreateNewNoteModal = ({ folders }: Props) => {
+const CreateNewNoteModal = ({ folders, userId }: Props) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const modal = searchParams.get('modal');
@@ -21,9 +24,43 @@ const CreateNewNoteModal = ({ folders }: Props) => {
     const postId = searchParams.get('postId');
 
     const [errors, setErrors] = useState<Errors>(null);
+    const [isMutation, setIsMutation] = useState(false);
 
     const clientAction = async (formData: FormData) => {
+        if (isMutation) return null;
+        setIsMutation(true);
 
+        try {
+            const data = {
+                userId,
+                folderId: formData.get('folderId') as string,
+                title: formData.get('title') as string,
+                path: window.location.pathname
+            };
+
+            const validations = createPostSchema.safeParse(data);
+            if (!validations.success) {
+                let newErrors: Errors = {};
+
+                validations.error.issues.forEach(issue => {
+                    newErrors = { ...newErrors, [issue.path[0]]: issue.message };
+                });
+
+                setErrors(newErrors);
+                return null;
+            } else {
+                setErrors(null);
+            }
+
+            const res = await createPostAction(data);
+            if (res.message === "Post created successfully.") {
+                router.push(`/?folderId=${res?.data?.folderId}&postId=${res?.data?.id}`);
+            }
+        } catch (error) {
+            console.info(["[ERROR_CLIENT_ACTION]"], error);
+        } finally {
+            setIsMutation(false);
+        }
     }
 
     const cancel = () => {
@@ -43,7 +80,7 @@ const CreateNewNoteModal = ({ folders }: Props) => {
                 {/* Title & Folder */}
                 <form action={clientAction} className="flex flex-col gap-y-20">
                     <div className="flex flex-col gap-y-3">
-                        <label htmlFor="title" className="label">Password</label>
+                        <label htmlFor="title" className="label">Title</label>
                         <input type="text" placeholder="Title" id="title" name="title" className={`input ${errors?.title ? 'input-error' : null}`} />
 
                         {errors?.title && <p className="text-red-500 font-sans">{errors?.title}</p>}
@@ -62,11 +99,11 @@ const CreateNewNoteModal = ({ folders }: Props) => {
                     {/* Button Submit & Cancel */}
                     <div className="flex flex-items-center gap-x-10">
                         {/* Submit */}
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-primary" disabled={isMutation}>
                             Save
                         </button>
                         {/* Cancel */}
-                        <button type="button" className="w-fit flex-1 btn btn-danger" onClick={cancel}>
+                        <button type="button" className="w-fit flex-1 btn btn-danger" onClick={cancel} disabled={isMutation}>
                             Cancel
                         </button>
                     </div>
