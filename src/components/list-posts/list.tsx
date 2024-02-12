@@ -1,19 +1,27 @@
+"use client";
+
+import PostType from '@/types/post.type';
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 type Props = {
-    title: string
-    createdAt: string
-    body: string
-    active: boolean
+    post: PostType;
+    active: boolean;
 }
 
-const List = ({ title, createdAt, body, active }: Props) => {
+const List = ({ post, active }: Props) => {
+    const router = useRouter();
+
+    const redirectTo = () => {
+        router.push(`/?folderId=${post.folderId}&postId=${post.id}`);
+    }
+
     return (
-        <div className={`p-20 flex flex-col gap-y-10 rounded-3 ${active ? "bg-white/15" : "bg-white/5"} cursor-pointer`}>
-            <h4 className="font-sans font-semibold text-18 text-white">{title}</h4>
+        <div onClick={redirectTo} className={`p-20 flex flex-col gap-y-10 rounded-3 ${active ? "bg-white/15" : "bg-white/5"} cursor-pointer`}>
+            <h4 className="font-sans font-semibold text-18 text-white">{post.title}</h4>
             <div className="flex items-center gap-x-10">
-                <p className="font-sans font-normal text-16 text-white/40">{createdAt}</p>
-                <p className="font-sans font-normal text-16 text-white/60">{body}</p>
+                <p className="font-sans font-normal text-16 text-white/40">{post.createdAt.toLocaleDateString()}</p>
+                <p className="font-sans font-normal text-16 text-white/60">{post.body}</p>
             </div>
         </div>
     )

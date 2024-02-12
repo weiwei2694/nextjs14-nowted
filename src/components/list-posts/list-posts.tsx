@@ -24,9 +24,7 @@ const ListPosts = ({ folder, postId }: Props) => {
                         {folder.posts.length ? (
                             folder.posts.map(post => (
                                 <List
-                                    title={post.title}
-                                    createdAt={post.createdAt.toLocaleDateString()}
-                                    body={post.body}
+                                    post={post}
                                     active={postId === post.id}
                                 />
                             ))
