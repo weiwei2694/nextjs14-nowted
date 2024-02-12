@@ -32,6 +32,14 @@ const Sidebar = ({ folders, recents, userId }: Props) => {
     signOut();
   }
 
+  const createNewNote = () => {
+    if (folderId && postId) {
+      window.location.href = `/?folderId=${folderId}&postId=${postId}&modal=open`;
+    } else {
+      window.location.href = `/?folderId=${folderId}&modal=open`;
+    }
+  }
+
   return (
     <nav className="min-w-300 max-w-300 bg-[#1b1b1b] h-screen py-30 flex flex-col gap-y-30 overflow-y-auto">
       {/* Logo & Search Buttonn */}
@@ -47,7 +55,7 @@ const Sidebar = ({ folders, recents, userId }: Props) => {
       </div>
       {/* New Note Button */}
       <div className="px-20">
-        <button className="rounded-3 bg-white/5 text-white w-full h-40 p-20 flex items-center justify-center gap-x-8 font-sans font-semibold text-16">
+        <button className="rounded-3 bg-white/5 text-white w-full h-40 p-20 flex items-center justify-center gap-x-8 font-sans font-semibold text-16" onClick={createNewNote}>
           <FaPlus className="w-20 h-20" />
           New Note
         </button>

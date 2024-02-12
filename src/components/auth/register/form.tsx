@@ -77,7 +77,7 @@ const Form = () => {
             </p>
 
             {/* Button Submit */}
-            <button type="submit" className="rounded-3 bg-primary hover:bg-primary/90 text-white w-full h-40 p-20 flex items-center justify-center gap-x-8 font-sans font-semibold text-16">
+            <button type="submit" className="btn btn-primary">
                 Register
             </button>
         </form>
