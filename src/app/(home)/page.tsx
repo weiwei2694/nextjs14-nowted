@@ -49,11 +49,26 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   if (folderId && !folder)
     redirect('/');
 
+  let post: PostType | null = null;
+  if (postId && folder) {
+    post = await prismadb.post.findFirst({
+      where: {
+        id: postId,
+        userId: session.user.userId,
+        folderId: folder.id
+      }
+    });
+
+    if (!post) {
+      redirect(`/?folderId=${folderId}`);
+    }
+  }
+
   return (
     <main className="flex">
       <Sidebar recents={recents} folders={folders} userId={session.user.userId} />
       <ListPosts folder={folder} postId={postId} />
-      <Main />
+      <Main post={post} />
 
       {/* components/sidebar/create-new-note-modal.tsx */}
       <CreateNewNoteModal folders={folders} userId={session.user.userId} />
