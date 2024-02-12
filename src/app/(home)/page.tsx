@@ -2,6 +2,7 @@ import ListPosts from "@/components/list-posts/list-posts";
 import Main from "@/components/main/main";
 import CreateNewNoteModal from "@/components/sidebar/create-new-note-modal";
 import Sidebar from "@/components/sidebar/sidebar";
+import { IPostWithFolderName } from "@/interfaces/post.interface";
 import prismadb from "@/lib/prismaDb";
 import { authOptions } from "@/lib/utils/auth-options";
 import FolderType from "@/types/folder.type";
@@ -49,13 +50,20 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   if (folderId && !folder)
     redirect('/');
 
-  let post: PostType | null = null;
+  let post: IPostWithFolderName | null = null;
   if (postId && folder) {
     post = await prismadb.post.findFirst({
       where: {
         id: postId,
         userId: session.user.userId,
         folderId: folder.id
+      },
+      include: {
+        folder: {
+          select: {
+            name: true
+          }
+        }
       }
     });
 

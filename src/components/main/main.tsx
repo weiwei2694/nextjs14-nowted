@@ -1,14 +1,14 @@
 "use client";
 
-import PostType from '@/types/post.type';
 import React from 'react'
 import { CiFolderOn } from 'react-icons/ci';
 import { IoEllipsisHorizontalCircle } from 'react-icons/io5';
 import { MdOutlineDateRange } from 'react-icons/md';
 import ChooseFile from './choose-file';
+import { IPostWithFolderName } from '@/interfaces/post.interface';
 
 type Props = {
-    post: PostType | null
+    post: IPostWithFolderName | null;
 }
 
 const Main = ({ post }: Props) => {
@@ -18,7 +18,7 @@ const Main = ({ post }: Props) => {
                 <>
                     {/* Title & Menu */}
                     <div className="flex justify-between gap-x-30">
-                        <h1 className="font-sans font-semibold text-32 text-white">Reflection on the Month of June</h1>
+                        <h1 className="font-sans font-semibold text-32 text-white">{post.title}</h1>
                         <button>
                             <IoEllipsisHorizontalCircle className="w-33 h-33 text-white/60" />
                         </button>
@@ -30,7 +30,7 @@ const Main = ({ post }: Props) => {
                                 <MdOutlineDateRange className="w-23 h-23 text-white/60" />
                                 <h4 className="font-sans font-semibold text-16 text-white/60">Date</h4>
                             </div>
-                            <h4 className="font-sans font-semibold text-16 text-white underline">21/06/2022</h4>
+                            <h4 className="font-sans font-semibold text-16 text-white underline">{post.createdAt.toLocaleDateString()}</h4>
                         </div>
                         <div className="h-1 w-full bg-white/10" />
                         <div className="flex items-center pt-15">
@@ -38,13 +38,13 @@ const Main = ({ post }: Props) => {
                                 <CiFolderOn className="w-23 h-23 text-white/60" />
                                 <h4 className="font-sans font-semibold text-16 text-white/60">Folder</h4>
                             </div>
-                            <h4 className="font-sans font-semibold text-16 text-white underline">Personal</h4>
+                            <h4 className="font-sans font-semibold text-16 text-white underline">{post.folder.name}</h4>
                         </div>
                     </div>
                     {/* Line */}
                     <div className="h-1 w-full bg-white/10" />
                     {/* Textarea/Body */}
-                    <textarea className="bg-transparent border-none outline-none text-white font-normal text-16 h-full resize-none placeholder:text-white/60" name="body" autoFocus placeholder="What do you want to note?">
+                    <textarea value={post.body} className="bg-transparent border-none outline-none text-white font-normal text-16 h-full resize-none placeholder:text-white/60" name="body" autoFocus placeholder="What do you want to note?">
                     </textarea>
                 </>
             ) : (
