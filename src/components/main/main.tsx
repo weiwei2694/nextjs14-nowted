@@ -44,7 +44,7 @@ const Main = ({ post }: Props) => {
                     {/* Line */}
                     <div className="h-1 w-full bg-white/10" />
                     {/* Textarea/Body */}
-                    <textarea value={post.body} className="bg-transparent border-none outline-none text-white font-normal text-16 h-full resize-none placeholder:text-white/60" name="body" autoFocus placeholder="What do you want to note?">
+                    <textarea defaultValue={post.body} className="bg-transparent border-none outline-none text-white font-normal text-16 h-full resize-none placeholder:text-white/60" name="body" autoFocus placeholder="What do you want to note?">
                     </textarea>
                 </>
             ) : (

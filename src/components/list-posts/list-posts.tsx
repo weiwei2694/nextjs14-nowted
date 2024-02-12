@@ -24,6 +24,7 @@ const ListPosts = ({ folder, postId }: Props) => {
                         {folder.posts.length ? (
                             folder.posts.map(post => (
                                 <List
+                                    key={post.id}
                                     post={post}
                                     active={postId === post.id}
                                 />
