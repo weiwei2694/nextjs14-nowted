@@ -8,3 +8,8 @@ export const createPostSchema = z.object({
 	folderId: z.string().min(1, { message: 'Folder is required' }),
 	userId: z.string().min(1),
 });
+
+export const updatePostBodySchema = z.object({
+	id: z.string().min(1, { message: 'Folder is required' }),
+	body: z.string(),
+});

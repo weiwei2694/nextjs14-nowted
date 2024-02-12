@@ -5,6 +5,12 @@ export interface ICreatePost {
 	path: string;
 }
 
+export interface IUpdatePostBody {
+	id: string;
+	body: string;
+	path: string;
+}
+
 export interface IPostWithFolderName {
 	id: string;
 	title: string;

@@ -1,12 +1,20 @@
 "use client";
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CiFolderOn } from 'react-icons/ci';
 import { IoEllipsisHorizontalCircle } from 'react-icons/io5';
 import { MdOutlineDateRange } from 'react-icons/md';
 import ChooseFile from './choose-file';
 import { IPostWithFolderName } from '@/interfaces/post.interface';
 import Menu from './menu';
+import { Toaster, toast } from 'sonner'
+import { updatePostBodySchema } from '@/validations/post.validation';
+import { updatePostBodyAction } from '@/actions/post.action';
+import { useDebounce } from 'use-debounce';
+
+type Errors = {
+    body?: string;
+} | null
 
 type Props = {
     post: IPostWithFolderName | null;
@@ -14,13 +22,59 @@ type Props = {
 
 const Main = ({ post }: Props) => {
     const [openMenu, setOpenMenu] = useState(false);
+    const [isMutation, setIsMutation] = useState(false);
+    const [errors, setErrors] = useState<Errors>(null);
+    const [body, setBody] = useState<string | null>(post?.body || null);
+    const [debounced] = useDebounce(body, 1000);
 
     const clientAction = async () => {
-        //...
+        if (isMutation) return null;
+        setIsMutation(true);
+
+        try {
+            const data = {
+                id: post?.id || "",
+                body: body || "",
+                path: window.location.pathname
+            }
+
+            const validations = updatePostBodySchema.safeParse(data);
+            if (!validations.success) {
+                let newErrors: Errors = {};
+
+                validations.error.issues.forEach(issue => {
+                    newErrors = { ...newErrors, [issue.path[0]]: issue.message };
+                });
+
+                setErrors(newErrors);
+                return null;
+            } else {
+                setErrors(null);
+            }
+
+            const res = await updatePostBodyAction(data);
+            if (res.message === "Something went wrong.") {
+                throw new Error(res.message);
+            }
+        } catch (error) {
+            console.info("[ERROR_CLIENT_ACTION]", error);
+
+            toast.error("Something went wrong.");
+        } finally {
+            setIsMutation(false);
+        }
     }
+
+    useEffect(() => {
+        clientAction();
+    }, [debounced]);
 
     return (
         <div className="p-50 flex flex-col gap-y-30 w-full bg-primary">
+            <div className="absolute">
+                <Toaster position="top-right" richColors />
+            </div>
+
             {post ? (
                 <>
                     {/* Title & Menu */}
@@ -31,7 +85,7 @@ const Main = ({ post }: Props) => {
                                 <IoEllipsisHorizontalCircle className="w-33 h-33 text-white/60" />
                             </button>
 
-                            {openMenu ? <Menu /> : null}
+                            {openMenu ? <Menu setOpenMenu={setOpenMenu} /> : null}
                         </div>
                     </div>
                     {/* Date & Folder */}
@@ -55,10 +109,18 @@ const Main = ({ post }: Props) => {
                     {/* Line */}
                     <div className="h-1 w-full bg-white/10" />
                     {/* Textarea/Body */}
-                    <form action={clientAction} className="w-full h-full">
-                        <textarea defaultValue={post.body} className="bg-transparent border-none outline-none text-white font-normal text-16 w-full h-full resize-none placeholder:text-white/60" name="body" autoFocus placeholder="What do you want to note?">
+                    <div className="flex flex-col gap-y-3 h-full w-full">
+                        <textarea
+                            defaultValue={post.body}
+                            onChange={e => setBody(e.target.value)}
+                            className="bg-transparent border-none outline-none text-white font-normal text-16 w-full h-full resize-none placeholder:text-white/60"
+                            name="body"
+                            autoFocus
+                        >
                         </textarea>
-                    </form>
+
+                        {errors?.body && <p className="text-red-500 font-sans">{errors?.body}</p>}
+                    </div>
                 </>
             ) : (
                 <ChooseFile />
