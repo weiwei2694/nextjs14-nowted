@@ -4,6 +4,9 @@ type PostType = {
 	body: string;
 	userId: string;
 	folderId: string;
+	archivedAt: Date;
+	deletedAt: Date;
+	favoritedAd: Date;
 	createdAt: Date;
 	updatedAt: Date;
 };

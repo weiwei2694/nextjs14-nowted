@@ -40,6 +40,10 @@ model Post {
   folderId String
   userId   String
 
+  deletedAt   DateTime?
+  archivedAt  DateTime?
+  favoritedAt DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
