@@ -11,6 +11,7 @@ import { Toaster, toast } from 'sonner'
 import { updatePostBodySchema } from '@/validations/post.validation';
 import { updatePostBodyAction } from '@/actions/post.action';
 import { useDebounce } from 'use-debounce';
+import { useSearchParams } from 'next/navigation';
 
 type Errors = {
     body?: string;
@@ -21,11 +22,16 @@ type Props = {
 }
 
 const Main = ({ post }: Props) => {
+    const postId = useSearchParams().get('postId');
     const [openMenu, setOpenMenu] = useState(false);
     const [isMutation, setIsMutation] = useState(false);
     const [errors, setErrors] = useState<Errors>(null);
-    const [body, setBody] = useState<string | null>(post?.body || null);
-    const [debounced] = useDebounce(body, 1000);
+    const [body, setBody] = useState<string>(post?.body || "");
+    const [debounced] = useDebounce(body, 300);
+
+    useEffect(() => {
+        setBody(post?.body || "");
+    }, [postId]);
 
     const clientAction = async () => {
         if (isMutation) return null;
@@ -34,7 +40,7 @@ const Main = ({ post }: Props) => {
         try {
             const data = {
                 id: post?.id || "",
-                body: body || "",
+                body: debounced || "",
                 path: window.location.pathname
             }
 
@@ -111,7 +117,7 @@ const Main = ({ post }: Props) => {
                     {/* Textarea/Body */}
                     <div className="flex flex-col gap-y-3 h-full w-full">
                         <textarea
-                            defaultValue={post.body}
+                            value={body}
                             onChange={e => setBody(e.target.value)}
                             className="bg-transparent border-none outline-none text-white font-normal text-16 w-full h-full resize-none placeholder:text-white/60"
                             name="body"
