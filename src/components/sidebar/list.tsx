@@ -23,10 +23,12 @@ const List = ({ title, icon, active, activeColor, folderId, postId }: Props) => 
         }
     }
 
+    const trimmedTitle = title.substring(0, 25) + '...';
+
     return (
         <div onClick={redirectTo} className={`py-10 px-20 h-40 w-full flex items-center gap-x-15 cursor-pointer ${active ? activeColor : "opacity-60"}`}>
             {icon}
-            <h3 className="font-sans text-16 font-semibold text-white">{title}</h3>
+            <h3 className="font-sans text-16 font-semibold text-white">{trimmedTitle}</h3>
         </div>
     )
 }
