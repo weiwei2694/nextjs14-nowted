@@ -23,7 +23,7 @@ const List = ({ title, icon, active, activeColor, folderId, postId }: Props) => 
         }
     }
 
-    const trimmedTitle = title.substring(0, 25) + '...';
+    const trimmedTitle = title.length > 25 ? title.substring(0, 25) + '...' : title;
 
     return (
         <div onClick={redirectTo} className={`py-10 px-20 h-40 w-full flex items-center gap-x-15 cursor-pointer ${active ? activeColor : "opacity-60"}`}>

@@ -16,8 +16,8 @@ const List = ({ post, active }: Props) => {
         router.push(`/?folderId=${post.folderId}&postId=${post.id}`);
     }
 
-    const trimmedTitle = post.title.substring(0, 90) + '...';
-    const trimmedBody = post.body.substring(0, 20) + '...';
+    const trimmedTitle = post.title.length > 90 ? post.title.substring(0, 90) + '...' : post.title;
+    const trimmedBody = post.body.length > 20 ? post.body.substring(0, 20) + '...' : post.body;
 
     return (
         <div onClick={redirectTo} className={`p-20 flex flex-col gap-y-10 rounded-3 ${active ? "bg-white/15" : "bg-white/5"} cursor-pointer`}>
