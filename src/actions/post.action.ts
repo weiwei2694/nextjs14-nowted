@@ -2,6 +2,7 @@
 
 import {
 	ICreatePost,
+	IUpdatePostArchivedAt,
 	IUpdatePostBody,
 	IUpdatePostDeletedAt,
 	IUpdatePostFavoritedAt,
@@ -170,6 +171,66 @@ export const updatePostFavoritedAtAction = async ({
 		return {
 			data: null,
 			message: 'Post favorited successfully.',
+		};
+	} catch (error) {
+		console.info('[ERROR_UPDATED_POST_FAVORITED_AT_ACTION]', error);
+
+		return {
+			data: null,
+			message: 'Something went wrong.',
+		};
+	} finally {
+		revalidatePath(path);
+	}
+};
+
+export const updatePostArchivedAtAction = async ({
+	postId,
+	path,
+}: IUpdatePostArchivedAt) => {
+	try {
+		const post = await prismadb.post.findUnique({
+			where: {
+				id: postId,
+			},
+		});
+
+		if (!post) {
+			return {
+				data: null,
+				message: 'Post not found.',
+			};
+		}
+
+		if (post.archivedAt !== null) {
+			await prismadb.post.update({
+				where: {
+					id: post.id,
+				},
+				data: {
+					archivedAt: null,
+				},
+			});
+
+			return {
+				data: null,
+				message: 'Post unarchived successfully.',
+			};
+		}
+
+		await prismadb.post.update({
+			where: {
+				id: post.id,
+			},
+			data: {
+				archivedAt: new Date(),
+				favoritedAt: null,
+			},
+		});
+
+		return {
+			data: null,
+			message: 'Post archived successfully.',
 		};
 	} catch (error) {
 		console.info('[ERROR_UPDATED_POST_FAVORITED_AT_ACTION]', error);

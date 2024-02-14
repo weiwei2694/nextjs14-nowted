@@ -17,9 +17,9 @@ export interface IPostWithFolderName {
 	body: string;
 	userId: string;
 	folderId: string;
-	archivedAt: Date;
-	deletedAt: Date;
-	favoritedAt: Date;
+	archivedAt: Date | null;
+	deletedAt: Date | null;
+	favoritedAt: Date | null;
 	createdAt: Date;
 	updatedAt: Date;
 	folder: {
@@ -33,5 +33,9 @@ export interface IUpdatePostDeletedAt {
 }
 
 export interface IUpdatePostFavoritedAt extends IUpdatePostDeletedAt {
+	// ...
+}
+
+export interface IUpdatePostArchivedAt extends IUpdatePostDeletedAt {
 	// ...
 }

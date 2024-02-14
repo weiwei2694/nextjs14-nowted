@@ -42,7 +42,11 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
       userId: session.user.userId
     },
     include: {
-      posts: true
+      posts: {
+        where: {
+          archivedAt: null
+        }
+      }
     }
   });
   if (!folderId && folder)
@@ -56,7 +60,8 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
       where: {
         id: postId,
         userId: session.user.userId,
-        folderId: folder.id
+        folderId: folder.id,
+        archivedAt: null
       },
       include: {
         folder: {
