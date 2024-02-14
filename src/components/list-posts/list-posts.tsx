@@ -6,23 +6,22 @@ import PostType from '@/types/post.type';
 import ChooseFolder from './choose-folder';
 
 type Props = {
-    folder: {
-        name: string;
-        posts: PostType[];
-    } | null;
+    posts: PostType[];
+    folderName: string | null;
     postId: string | undefined;
+    type: string;
 }
 
-const ListPosts = ({ folder, postId }: Props) => {
+const ListPosts = ({ folderName, posts, postId, type }: Props) => {
     return (
         <section className="min-w-350 max-w-350 h-screen overflow-y-auto py-30 bg-[#1C1C1C] flex flex-col gap-y-30">
-            {folder ? (
+            {folderName && posts.length ? (
                 <>
-                    <h2 className="px-20 font-sans font-semibold text-22 text-white">{folder.name}</h2>
+                    <h2 className="px-20 font-sans font-semibold text-22 text-white">{folderName}</h2>
 
                     <div className="flex flex-col gap-y-20 px-20">
-                        {folder.posts.length ? (
-                            folder.posts.map(post => (
+                        {posts.length ? (
+                            posts.map(post => (
                                 <List
                                     key={post.id}
                                     post={post}
@@ -35,7 +34,7 @@ const ListPosts = ({ folder, postId }: Props) => {
                     </div>
                 </>
             ) : (
-                <ChooseFolder />
+                <ChooseFolder type={type} />
             )}
         </section>
     )

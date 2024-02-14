@@ -1,7 +1,7 @@
 "use client";
 
 import PostType from '@/types/post.type';
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
 type Props = {
@@ -10,10 +10,16 @@ type Props = {
 }
 
 const List = ({ post, active }: Props) => {
+    const searchParams = useSearchParams();
+    const category = searchParams.get('category');
     const router = useRouter();
 
     const redirectTo = () => {
-        router.push(`/?folderId=${post.folderId}&postId=${post.id}`);
+        if (category) {
+            router.push(`/?category=${category}&postId=${post.id}`);
+        } else {
+            router.push(`/?folderId=${post.folderId}&postId=${post.id}`);
+        }
     }
 
     const trimmedTitle = post.title.length > 90 ? post.title.substring(0, 90) + '...' : post.title;

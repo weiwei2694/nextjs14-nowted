@@ -1,5 +1,6 @@
 "use client"
 
+import { ICategoryOption } from '@/interfaces/category.interface';
 import { useRouter } from 'next/navigation';
 import React from 'react'
 
@@ -16,6 +17,18 @@ const List = ({ title, icon, active, activeColor, folderId, postId }: Props) => 
     const router = useRouter();
 
     const redirectTo = () => {
+        const option: ICategoryOption = {
+            "Favorites": "/?category=favorites",
+            "Trash": "/?category=trash",
+            "Archived Notes": "/?category=archived-notes"
+        }
+
+        const url: string | null = option[title] || null;
+        if (url) {
+            router.push(option[title]);
+            return null;
+        }
+
         if (folderId && postId) {
             router.push(`/?folderId=${folderId}&postId=${postId}`);
         } else {
