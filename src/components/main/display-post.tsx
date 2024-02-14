@@ -86,7 +86,7 @@ const DisplayPost = ({ post }: Props) => {
                         <IoEllipsisHorizontalCircle className="w-33 h-33 text-white/60" />
                     </button>
 
-                    {openMenu ? <Menu setOpenMenu={setOpenMenu} postId={post?.id} /> : null}
+                    {openMenu ? <Menu setOpenMenu={setOpenMenu} postId={post?.id} favoritedAt={post?.favoritedAt} /> : null}
                 </div>
             </div>
             {/* Date & Folder */}

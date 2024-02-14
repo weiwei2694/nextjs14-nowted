@@ -6,7 +6,7 @@ type PostType = {
 	folderId: string;
 	archivedAt: Date;
 	deletedAt: Date;
-	favoritedAd: Date;
+	favoritedAt: Date;
 	createdAt: Date;
 	updatedAt: Date;
 };

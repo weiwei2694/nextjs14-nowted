@@ -19,7 +19,7 @@ export interface IPostWithFolderName {
 	folderId: string;
 	archivedAt: Date;
 	deletedAt: Date;
-	favoritedAd: Date;
+	favoritedAt: Date;
 	createdAt: Date;
 	updatedAt: Date;
 	folder: {
@@ -30,4 +30,8 @@ export interface IPostWithFolderName {
 export interface IUpdatePostDeletedAt {
 	postId: string;
 	path: string;
+}
+
+export interface IUpdatePostFavoritedAt extends IUpdatePostDeletedAt {
+	// ...
 }
