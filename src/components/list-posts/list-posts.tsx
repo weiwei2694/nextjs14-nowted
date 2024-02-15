@@ -15,7 +15,7 @@ type Props = {
 const ListPosts = ({ folderName, posts, postId, type }: Props) => {
     return (
         <section className="min-w-350 max-w-350 h-screen overflow-y-auto py-30 bg-[#1C1C1C] flex flex-col gap-y-30">
-            {folderName && posts.length ? (
+            {folderName ? (
                 <>
                     <h2 className="px-20 font-sans font-semibold text-22 text-white">{folderName}</h2>
 
@@ -29,7 +29,11 @@ const ListPosts = ({ folderName, posts, postId, type }: Props) => {
                                 />
                             ))
                         ) : (
-                            <h3 className="subheading">This folder doesn't have any posts yet</h3>
+                            <h3 className="subheading">
+                                {type === "Folder"
+                                    ? "This folder doesn't have any posts yet"
+                                    : `This ${type} doesn't have any posts yet`}
+                            </h3>
                         )}
                     </div>
                 </>
