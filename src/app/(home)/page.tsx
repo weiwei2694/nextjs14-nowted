@@ -31,6 +31,9 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   const recents: PostType[] = await prismadb.post.findMany({
     where: {
       userId: session.user.userId,
+      NOT: {
+        archivedAt: null,
+      }
     },
     take: 5,
     orderBy: {
