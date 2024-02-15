@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Fullstack Nowted Apps: Nextjs 14, Reactjs, Typescript, Prisma, NextAuth v4, Tailwind CSS, MySQL, Railway
 
-## Getting Started
+## Demo: Nowted App
+<a href="https://nextjs14-nowted.vercel.app/" target="_blank">Nowted Apps</a><br />
+Adapted from: <a href="https://codedesign.dev/challenge/nowted-app">Nauval - Nowted App</a>
 
-First, run the development server:
+This website is completely made for desktop only, so if you access it via mobile or tablet, maybe the display you see is not good enough, or very messy.
+
+If you can't open it or there are problems, most likely my railway hobby plan has run out :(.
+So run it locally if you want to see all the features.
+
+because I use a hobby plan from railway, the performance presented by my website will not be very good, maybe there will be a delay of 1-5 seconds, when querying.
+
+<img src="./public/assets/previews/preview-note.PNG" />
+<img src="./public/assets/previews/preview-restore.PNG" />
+<img src="./public/assets/previews/preview-create-new-note.PNG" />
+
+## Key Features
+
+- Authentication with NextAuth v4
+- Authorization
+- Realtime Edit - Debouncing
+- Soft Delete
+- Soft Archive
+- Soft Favorite
+- Beautiful UI using TailwindCSS
+- MySQL database using Railways
+- ORM using Prisma
+- Desktop Only
+- The main logic or view of Nowted, based on searchParams
+
+## Cloning the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/weiwei2694/nextjs14-nowted.git
+cd nextjs14-nowted
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Install packages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+yarn install
+pnpm install
+bun install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Setup .env file
 
-## Learn More
+```bash
+DATABASE_URL="mysql://USER:PASSWORD@HOST:PORT/DATABASE"
 
-To learn more about Next.js, take a look at the following resources:
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET=
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Setup Prisma
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Add MySQL Database (I used Railway - Instead of using railway, you can use local database)
 
-## Deploy on Vercel
+```bash
+npx prisma generate
+npx prisma db push
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Available commands
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| Command                | Description                              |
+| ---------------------- | ---------------------------------------- |
+| `npm run dev`          | Starts a development instance of the app |
+| `npm run build`        | Builds the app for production            |
+| `npm run start`        | Starts the app in production mode        |
