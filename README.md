@@ -21,8 +21,6 @@ because I use a hobby plan from railway, the performance presented by my website
 - Authorization
 - Realtime Edit - Debouncing
 - Soft Delete
-- Soft Archive
-- Soft Favorite
 - Beautiful UI using TailwindCSS
 - MySQL database using Railways
 - ORM using Prisma
