@@ -41,8 +41,8 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
 
   const { folderId, postId, category } = searchParams;
 
-  let categoryWithPosts: any | null = null;
-  let selectedCategory: string | null = null;
+  let categoryWithPosts: IPostWithFolderName[] | null = null;
+  let selectedCategory: [string, string] | null = null;
   let folder: IFolderWithPosts | null = null;
 
   if (
@@ -50,22 +50,27 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
     ["archived-notes", "favorites", "trash"].includes(category)
   ) {
     const categories: ICategory = {
-      "archived-notes": ["archivedAt", "Archived Notes"],
-      "favorites": ["favoritedAt", "Favorites"],
-      "trash": ["deletedAt", "Trash"],
-    }
-    selectedCategory = categories[category][0];
+      'archived-notes': ['archivedAt', 'Archived Notes'],
+      favorites: ['favoritedAt', 'Favorites'],
+      trash: ['deletedAt', 'Trash'],
+    };
+    selectedCategory = categories[category];
 
     categoryWithPosts = await prismadb.post.findMany({
       where: {
         userId: session.user.userId,
         NOT: {
-          [selectedCategory]: null
+          [selectedCategory[0]]: null
+        }
+      },
+      include: {
+        folder: {
+          select: {
+            name: true
+          }
         }
       }
     });
-
-    selectedCategory = categories[category][1];
 
     if (category && !categoryWithPosts)
       redirect('/');
@@ -118,7 +123,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
       userId: session.user.userId
     }
 
-    if (selectedCategory !== "Archived Notes") {
+    if (selectedCategory && selectedCategory[1] !== "Archived Notes") {
       whereOption.archivedAt = null;
     }
 
@@ -133,8 +138,8 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
       }
     });
 
-    if (!post) {
-      redirect(`/?category=${selectedCategory}`);
+    if ((!post || !categoryWithPosts.some((p) => p.id === post?.id)) && selectedCategory) {
+      redirect(`/?category=${category}`);
     }
   }
 
@@ -142,7 +147,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
     <main className="flex">
       <Sidebar recents={recents} folders={folders} userId={session.user.userId} />
       {folder && <ListPosts type="Folder" folderName={folder.name} postId={postId} posts={folder.posts} />}
-      {categoryWithPosts && <ListPosts type="Category" folderName={selectedCategory} posts={categoryWithPosts} postId={postId} />}
+      {categoryWithPosts && selectedCategory && <ListPosts type="Category" folderName={selectedCategory[1]} posts={categoryWithPosts} postId={postId} />}
       <Main post={post} />
 
       {/* components/sidebar/create-new-note-modal.tsx */}
