@@ -217,7 +217,10 @@ export const updatePostArchivedAtAction = async ({
 			});
 
 			return {
-				data: null,
+				data: {
+					postId: post.id,
+					folderId: post.folderId,
+				},
 				message: 'Post unarchived successfully.',
 			};
 		}
@@ -233,7 +236,7 @@ export const updatePostArchivedAtAction = async ({
 		});
 
 		return {
-			data: null,
+			data: { postId: post.id },
 			message: 'Post archived successfully.',
 		};
 	} catch (error) {

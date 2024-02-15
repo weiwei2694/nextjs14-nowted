@@ -1,6 +1,7 @@
 "use client"
 
 import { updatePostArchivedAtAction, updatePostDeletedAtAction, updatePostFavoritedAtAction } from '@/actions/post.action';
+import { useRouter } from 'next/navigation';
 import React, { Dispatch, SetStateAction, useTransition, MouseEvent } from 'react'
 import { FaRegStar } from 'react-icons/fa6';
 import { FiArchive, FiTrash } from 'react-icons/fi';
@@ -11,9 +12,11 @@ type Props = {
     setOpenMenu: Dispatch<SetStateAction<boolean>>;
     postId: string | null;
     favoritedAt: Date | null;
+    archivedAt: Date | null;
 }
 
-const Menu = ({ setOpenMenu, postId, favoritedAt }: Props) => {
+const Menu = ({ setOpenMenu, postId, favoritedAt, archivedAt }: Props) => {
+    const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
     const closeMenu = (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
@@ -53,11 +56,19 @@ const Menu = ({ setOpenMenu, postId, favoritedAt }: Props) => {
         if (!postId || isPending) return null;
 
         try {
-            startTransition(() => {
-                updatePostArchivedAtAction({ postId, path: window.location.pathname });
+            startTransition(async () => {
+                const res = await updatePostArchivedAtAction({ postId, path: window.location.pathname });
+
+                if (res.message === "Post unarchived successfully." && res.data) {
+                    router.push(`/?folderId=${res.data.folderId}&postId=${res.data.postId}`);
+                }
+
+                if (res.message === "Post archived successfully." && res.data) {
+                    router.push(`/?category=archived-notes&postId=${res.data.postId}`);
+                }
             });
         } catch (error) {
-            console.info('[ERROR_FAVORITED]', error);
+            console.info('[ERROR_ARCHIVED]', error);
 
             toast.error("Something went wrong.");
         }
@@ -71,7 +82,7 @@ const Menu = ({ setOpenMenu, postId, favoritedAt }: Props) => {
             </button>
             <button className="flex items-center gap-x-15" onClick={archived} disabled={isPending}>
                 <FiArchive className="w-20 h-20" />
-                <h5 className="font-sans font-normal text-16">Archived</h5>
+                <h5 className="font-sans font-normal text-16">{archivedAt ? "Unarchive" : "Add to archive"}</h5>
             </button>
             <div className="h-1 w-full bg-white/5" />
             <button className="flex items-center gap-x-15" disabled={isPending} onClick={deleted}>

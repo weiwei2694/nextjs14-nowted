@@ -31,9 +31,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   const recents: PostType[] = await prismadb.post.findMany({
     where: {
       userId: session.user.userId,
-      NOT: {
-        archivedAt: null,
-      }
+      archivedAt: null
     },
     take: 5,
     orderBy: {
@@ -115,12 +113,17 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
       redirect(`/?folderId=${folderId}`);
     }
   } else if (postId && categoryWithPosts) {
+    const whereOption: any = {
+      id: postId,
+      userId: session.user.userId
+    }
+
+    if (selectedCategory !== "Archived Notes") {
+      whereOption.archivedAt = null;
+    }
+
     post = await prismadb.post.findFirst({
-      where: {
-        id: postId,
-        userId: session.user.userId,
-        archivedAt: null
-      },
+      where: whereOption,
       include: {
         folder: {
           select: {
