@@ -28,6 +28,7 @@ const Sidebar = ({ folders, recents, userId }: Props) => {
   const searchParams = useSearchParams();
   const folderId = searchParams.get('folderId');
   const postId = searchParams.get('postId');
+  const category = searchParams.get('category');
 
   const logoutHandler = () => {
     signOut();
@@ -95,17 +96,20 @@ const Sidebar = ({ folders, recents, userId }: Props) => {
           <List
             title="Favorites"
             icon={<FaRegStar className="w-20 h-20 text-white" />}
-            active={false}
+            active={category === "favorites"}
+            activeColor={category === "favorites" ? "bg-white/5" : ""}
           />
           <List
             title="Trash"
             icon={<FiTrash className="w-20 h-20 text-white" />}
-            active={false}
+            active={category === "trash"}
+            activeColor={category === "trash" ? "bg-white/5" : ""}
           />
           <List
             title="Archived Notes"
             icon={<FiArchive className="w-20 h-20 text-white" />}
-            active={false}
+            active={category === "archived-notes"}
+            activeColor={category === "archived-notes" ? "bg-white/5" : ""}
           />
         </div>
       </div>
