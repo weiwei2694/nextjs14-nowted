@@ -91,7 +91,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
 
     if (!folderId && folder)
       redirect(`/?folderId=${folder.id}`);
-    if (!folder)
+    if (folderId && !folder)
       redirect('/');
   }
 
