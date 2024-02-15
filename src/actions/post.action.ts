@@ -2,6 +2,7 @@
 
 import {
 	ICreatePost,
+	IDeletePostPermanent,
 	IUpdatePostArchivedAt,
 	IUpdatePostBody,
 	IUpdatePostDeletedAt,
@@ -92,7 +93,10 @@ export const updatePostDeletedAtAction = async ({
 			});
 
 			return {
-				data: null,
+				data: {
+					postId: post.id,
+					folderId: post.folderId,
+				},
 				message: 'Post undeleted successfully.',
 			};
 		}
@@ -231,6 +235,53 @@ export const updatePostArchivedAtAction = async ({
 		return {
 			data: null,
 			message: 'Post archived successfully.',
+		};
+	} catch (error) {
+		console.info('[ERROR_UPDATED_POST_FAVORITED_AT_ACTION]', error);
+
+		return {
+			data: null,
+			message: 'Something went wrong.',
+		};
+	} finally {
+		revalidatePath(path);
+	}
+};
+
+export const deletePostPermanentAction = async ({
+	postId,
+	path,
+}: IDeletePostPermanent) => {
+	try {
+		const post = await prismadb.post.findUnique({
+			where: {
+				id: postId,
+			},
+		});
+
+		if (!post) {
+			return {
+				data: null,
+				message: 'Post not found.',
+			};
+		}
+
+		if (post.deletedAt === null) {
+			return {
+				data: null,
+				message: 'Forbidden',
+			};
+		}
+
+		await prismadb.post.delete({
+			where: {
+				id: post.id,
+			},
+		});
+
+		return {
+			data: null,
+			message: 'Post deleted permanently.',
 		};
 	} catch (error) {
 		console.info('[ERROR_UPDATED_POST_FAVORITED_AT_ACTION]', error);

@@ -39,3 +39,7 @@ export interface IUpdatePostFavoritedAt extends IUpdatePostDeletedAt {
 export interface IUpdatePostArchivedAt extends IUpdatePostDeletedAt {
 	// ...
 }
+
+export interface IDeletePostPermanent extends IUpdatePostDeletedAt {
+	// ...
+}
