@@ -3,7 +3,8 @@
 import React, { useState } from 'react'
 import Link from 'next/link';
 import { loginSchema } from '@/validations/auth.validation';
-import { signIn } from "next-auth/react";
+import { SignInResponse, signIn } from "next-auth/react";
+import { toast } from 'sonner';
 
 type Errors = {
     email?: string;
@@ -12,28 +13,50 @@ type Errors = {
 
 const Form = () => {
     const [errors, setErrors] = useState<Errors>(null);
+    const [isMutation, setIsMutation] = useState<boolean>(false);
 
     const clientAction = async (formData: FormData) => {
-        const data = {
-            email: formData.get('email') as string,
-            password: formData.get('password') as string,
-        };
+        if (isMutation) return null;
+        setIsMutation(true);
 
-        const validations = loginSchema.safeParse(data);
-        if (!validations.success) {
-            let newErrors: Errors = {};
+        try {
+            const data = {
+                email: formData.get('email') as string,
+                password: formData.get('password') as string,
+            };
 
-            validations.error.issues.forEach(issue => {
-                newErrors = { ...newErrors, [issue.path[0]]: issue.message };
+            const validations = loginSchema.safeParse(data);
+            if (!validations.success) {
+                let newErrors: Errors = {};
+
+                validations.error.issues.forEach(issue => {
+                    newErrors = { ...newErrors, [issue.path[0]]: issue.message };
+                });
+
+                setErrors(newErrors);
+                return null;
+            } else {
+                setErrors(null);
+            }
+
+            const res: SignInResponse | undefined = await signIn("credentials", {
+                ...data,
+                redirect: false,
             });
 
-            setErrors(newErrors);
-            return null;
-        } else {
-            setErrors(null);
-        }
+            if (res?.error === "CredentialsSignin") {
+                setErrors({
+                    email: "Wrong email or password",
+                    password: "Wrong email or password",
+                })
+            }
+        } catch (error) {
+            console.info("[ERROR_CLIENT_ACTION]", error);
 
-        signIn("credentials", data);
+            toast.error("Something went wrong");
+        } finally {
+            setIsMutation(false);
+        }
     }
 
     return (
@@ -60,7 +83,7 @@ const Form = () => {
             </p>
 
             {/* Button Submit */}
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary" disabled={isMutation}>
                 Login
             </button>
         </form>

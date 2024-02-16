@@ -31,7 +31,7 @@ export const authOptions: NextAuthOptions = {
 				});
 				if (!user) return null;
 
-				const passwordCorrect = compare(password, user.password);
+				const passwordCorrect = await compare(password, user.password);
 				if (!passwordCorrect) return null;
 
 				return user;

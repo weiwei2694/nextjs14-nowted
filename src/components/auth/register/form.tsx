@@ -3,7 +3,8 @@
 import React, { useState } from 'react'
 import Link from 'next/link';
 import { registerSchema } from '@/validations/auth.validation';
-import { authRegister } from '@/actions/auth.action';
+import { authRegisterAction } from '@/actions/auth.action';
+import { toast } from 'sonner';
 
 type Errors = {
     name?: string;
@@ -13,35 +14,47 @@ type Errors = {
 
 const Form = () => {
     const [errors, setErrors] = useState<Errors>(null);
+    const [isMutation, setIsMutation] = useState<boolean>(false);
 
     const clientAction = async (formData: FormData) => {
-        const data = {
-            name: formData.get('name') as string,
-            email: formData.get('email') as string,
-            password: formData.get('password') as string,
-            path: window.location.pathname
-        };
+        if (isMutation) return null;
+        setIsMutation(true);
 
-        const validations = registerSchema.safeParse(data);
-        if (!validations.success) {
-            let newErrors: Errors = {};
+        try {
+            const data = {
+                name: formData.get('name') as string,
+                email: formData.get('email') as string,
+                password: formData.get('password') as string,
+                path: window.location.pathname
+            };
 
-            validations.error.issues.forEach(issue => {
-                newErrors = { ...newErrors, [issue.path[0]]: issue.message };
-            });
+            const validations = registerSchema.safeParse(data);
+            if (!validations.success) {
+                let newErrors: Errors = {};
 
-            setErrors(newErrors);
-            return null;
-        } else {
-            setErrors(null);
-        }
+                validations.error.issues.forEach(issue => {
+                    newErrors = { ...newErrors, [issue.path[0]]: issue.message };
+                });
 
-        const res = await authRegister(data);
-        if (res.message === "Email already exists") {
-            setErrors({ email: "Email already exists" });
-        }
-        if (res.message === "User created successfully") {
-            window.location.href = "/auth/login";
+                setErrors(newErrors);
+                return null;
+            } else {
+                setErrors(null);
+            }
+
+            const res = await authRegisterAction(data);
+            if (res.message === "Email already exists") {
+                setErrors({ email: "Email already exists" });
+            }
+            if (res.message === "User created successfully") {
+                window.location.href = "/auth/login";
+            }
+        } catch (error) {
+            console.info('[ERROR_CLIENT_ACTION]', error);
+
+            toast("Something went wrong");
+        } finally {
+            setIsMutation(false);
         }
     }
 
@@ -77,7 +90,7 @@ const Form = () => {
             </p>
 
             {/* Button Submit */}
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary" disabled={isMutation}>
                 Register
             </button>
         </form>

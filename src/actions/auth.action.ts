@@ -5,7 +5,7 @@ import prismadb from '@/lib/prismaDb';
 import { hash } from 'bcrypt';
 import { revalidatePath } from 'next/cache';
 
-export const authRegister = async ({
+export const authRegisterAction = async ({
 	name,
 	email,
 	password,

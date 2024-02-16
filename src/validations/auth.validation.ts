@@ -17,10 +17,11 @@ export const registerSchema = z.object({
 
 export const loginSchema = z.object({
 	email: z
-		.string({ required_error: 'Email is required' })
+		.string()
 		.email({ message: 'Email must be a valid email' })
 		.max(100, { message: 'Email must be less than 100 characters' }),
 	password: z
-		.string({ required_error: 'Password is required' })
+		.string()
+		.min(1, { message: 'Password is required' })
 		.max(100, { message: 'Password must be less than 100 characters' }),
 });
