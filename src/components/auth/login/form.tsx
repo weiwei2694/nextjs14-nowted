@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { loginSchema } from '@/validations/auth.validation';
 import { SignInResponse, signIn } from "next-auth/react";
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 type Errors = {
     email?: string;
@@ -12,6 +13,7 @@ type Errors = {
 } | null
 
 const Form = () => {
+    const router = useRouter();
     const [errors, setErrors] = useState<Errors>(null);
     const [isMutation, setIsMutation] = useState<boolean>(false);
 
@@ -49,6 +51,10 @@ const Form = () => {
                     email: "Wrong email or password",
                     password: "Wrong email or password",
                 })
+            }
+
+            if (res && res.ok && res.status === 200) {
+                router.push('/');
             }
         } catch (error) {
             console.info("[ERROR_CLIENT_ACTION]", error);
